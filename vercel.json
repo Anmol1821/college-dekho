@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "backend": {
+      "root": "govtdrish-backend-main/govtdrish-backend-main/",
+      "framework": "django",
+      "entrypoint": "core.wsgi:application",
+      "functions": {
+        "core/wsgi.py": {
+          "maxDuration": 60
+        }
+      }
+    },
+    "frontend": {
+      "root": "govtdrish-frontend-main/govtdrish-frontend-main/",
+      "framework": "nextjs",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "backend",
+          "format": "url",
+          "env": "BACKEND_URL"
+        }
+      ],
+      "functions": {
+        "app/api/[...path]/route.ts": {
+          "maxDuration": 60
+        }
+      }
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": { "service": "frontend" }
+    }
+  ]
+}
